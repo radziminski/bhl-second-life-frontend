@@ -1,6 +1,6 @@
 // General
-String kTitle = 'Second Life';
-double kVersion = 1.0;
+const String kTitle = 'Second Life';
+const double kVersion = 1.0;
 
 // Api
 

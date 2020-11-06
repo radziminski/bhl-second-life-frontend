@@ -1,4 +1,6 @@
 import 'package:SecondLife/constants.dart';
+import 'package:SecondLife/screens/offers_screen.dart';
+import 'package:SecondLife/styles/theme.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,11 +12,8 @@ class SecondLifeApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: kTitle,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: Scaffold(),
+      theme: appTheme,
+      home: OffersScreen(),
     );
   }
 }
