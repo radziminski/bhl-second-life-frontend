@@ -1,6 +1,32 @@
 # SecondLife
 
-A new Flutter project.
+Aplikacja mobilna złużąca do wymiany nieużywanych przedmiotów, zrobiona we flutterze podczas hackathonu Best Hacking League.
+
+## Taseczki
+
+### UI
+
+- loading screen
+- login screen
+- bottom nav bar
+- explore offers screen
+- matches screen
+- settings screen
+- add offer screen
+
+### Logika
+
+- location service
+- auth service
+- api request service
+- api service
+- images api? service
+- location model (state)
+- auth model (state)
+- offers model
+- messages model
+- user model
+- matches model
 
 ## Getting Started
 
