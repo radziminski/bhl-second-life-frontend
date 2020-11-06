@@ -41,39 +41,78 @@ class _OffersSwiperState extends State<OffersSwiper> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: double.infinity,
-        width: double.infinity,
-        child: Stack(children: [
+      height: double.infinity,
+      width: double.infinity,
+      child: Stack(
+        children: [
           _buildAllOffersCarusel(),
           Positioned(
             bottom: 0,
             left: 0,
             child: Container(
-              padding: EdgeInsets.symmetric(
-                vertical: 8.0,
+              padding: EdgeInsets.only(
+                top: 0.0,
+                bottom: 40.0,
               ),
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                color: Theme.of(context).canvasColor,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50.0),
-                  topRight: Radius.circular(50.0),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 9,
-                    offset: Offset(0, -3),
-                  )
-                ],
-              ),
+                  // color: Theme.of(context).canvasColor,
+                  // // borderRadius: BorderRadius.only(
+                  // //   topLeft: Radius.circular(50.0),
+                  // //   topRight: Radius.circular(50.0),
+                  // // ),
+                  // gradient: LinearGradient(
+                  //   begin: FractionalOffset.topCenter,
+                  //   end: FractionalOffset.bottomCenter,
+                  //   colors: [
+                  //     Colors.grey.withOpacity(0.0),
+                  //     Colors.white.withOpacity(0.8),
+                  //   ],
+                  //   stops: [0.0, 1.0],
+                  // ),
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //     color: Colors.grey.withOpacity(0.2),
+                  //     spreadRadius: 2,
+                  //     blurRadius: 9,
+                  //     offset: Offset(0, -3),
+                  //   )
+                  // ],
+                  ),
               child: Center(
-                child: _buildIconButton(context, icon: Icons.add),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildIconButton(
+                      context,
+                      onPressed: () {},
+                      icon: Icons.close,
+                      iconColor: Colors.red,
+                      size: 28,
+                    ),
+                    _buildIconButton(
+                      context,
+                      onPressed: () {},
+                      icon: Icons.favorite,
+                      iconColor: Colors.white,
+                      color: Color(0xFFFF6D6D),
+                      size: 40,
+                    ),
+                    _buildIconButton(
+                      context,
+                      onPressed: () {},
+                      icon: Icons.skip_next,
+                      iconColor: Colors.green,
+                      size: 28,
+                    ),
+                  ],
+                ),
               ),
             ),
-          )
-        ]));
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildAllOffersCarusel() {
@@ -95,41 +134,23 @@ class _OffersSwiperState extends State<OffersSwiper> {
                   Center(
                     child: _buildCurrOfferCarusel(imageList),
                   ),
-                  Positioned(
-                    top: 30,
-                    left: 36,
-                    child: Container(
-                      height: 46.0,
-                      child: Text(
-                        'Sample Title',
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.bold,
-                          textStyle: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 22.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 30.0,
-                    right: 10.0,
-                    child: _buildIconButton(
-                      context,
-                      icon: Icons.favorite,
-                      onPressed: () {},
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 30.0,
-                    right: 80.0,
-                    child: _buildIconButton(
-                      context,
-                      icon: Icons.delete,
-                      onPressed: () {},
-                    ),
-                  ),
+                  // Positioned(
+                  //   top: 30,
+                  //   left: 36,
+                  //   child: Container(
+                  //     height: 46.0,
+                  //     child: Text(
+                  //       'Sample Title',
+                  //       style: GoogleFonts.poppins(
+                  //         fontWeight: FontWeight.bold,
+                  //         textStyle: TextStyle(
+                  //           color: Colors.black87,
+                  //           fontSize: 22.0,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             );
@@ -149,8 +170,9 @@ class _OffersSwiperState extends State<OffersSwiper> {
         return Builder(
           builder: (BuildContext context) {
             return Padding(
-              padding: const EdgeInsets.all(0.0),
+              padding: const EdgeInsets.all(18.0),
               child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   child: OfferCard(url: url),
@@ -163,16 +185,24 @@ class _OffersSwiperState extends State<OffersSwiper> {
     );
   }
 
-  Widget _buildIconButton(context, {IconData icon, Function onPressed}) {
+  Widget _buildIconButton(
+    context, {
+    IconData icon,
+    Function onPressed,
+    Color iconColor = Colors.white,
+    Color color = Colors.white,
+    double size = 32,
+  }) {
     return FlatButton(
+      color: color,
       shape: CircleBorder(),
       onPressed: onPressed,
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Icon(
           icon,
-          size: 32.0,
-          color: Colors.white,
+          size: size,
+          color: iconColor,
         ),
       ),
     );

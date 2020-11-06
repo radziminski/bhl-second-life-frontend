@@ -1,20 +1,35 @@
+import 'package:SecondLife/constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-BottomNavigationBar buildDefaultBottomNavBar() {
+BottomNavigationBar buildDefaultBottomNavBar(context) {
   return BottomNavigationBar(
     fixedColor: Colors.white,
+    unselectedItemColor: Colors.white.withOpacity(0.7),
+    onTap: (selected) {
+      switch (selected) {
+        case 0:
+          return Navigator.pushNamed(context, kOffersRoute);
+        case 1:
+          return Navigator.pushNamed(context, kMessagesRoute);
+        case 2:
+          return Navigator.pushNamed(context, kSettingsRoute);
+        default:
+          return Navigator.pushNamed(context, kHomeRoute);
+      }
+    },
     items: [
       BottomNavigationBarItem(
-        label: 'Home',
-        icon: Icon(Icons.home),
+        label: '',
+        icon: Icon(CupertinoIcons.home),
       ),
       BottomNavigationBarItem(
-        label: 'Matches',
-        icon: Icon(Icons.connect_without_contact),
+        label: '',
+        icon: Icon(CupertinoIcons.chat_bubble),
       ),
       BottomNavigationBarItem(
-        label: 'Settings',
-        icon: Icon(Icons.settings),
+        label: '',
+        icon: Icon(CupertinoIcons.settings),
       ),
     ],
   );
