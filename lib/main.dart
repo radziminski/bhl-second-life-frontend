@@ -1,10 +1,12 @@
 import 'package:SecondLife/constants.dart';
+import 'package:SecondLife/locator.dart';
 import 'package:SecondLife/routes.dart';
 import 'package:SecondLife/screens/offers_screen.dart';
 import 'package:SecondLife/styles/theme.dart';
 import 'package:flutter/material.dart';
 
 void main() {
+  setupLocator();
   runApp(SecondLifeApp());
 }
 

@@ -3,14 +3,14 @@ import 'dart:ui';
 import 'package:SecondLife/widgets/OfferCard.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-
-const mockUrls = [
-  'https://www.peppermillinteriors.com/image/catalog/products/chr-403-ra-vintage-style-armchair/vintage-style-armchair.jpg',
-  'https://previews.123rf.com/images/technobulka/technobulka1712/technobulka171200038/91301121-red-vintage-sprint-scooter-oldschool.jpg',
-  'https://img1.elektrobike-online.com/UB-Wattitud-Old-Timer-Old-School-E-Bike-gallerySquareTeaser-990bd9ef-1573817.jpg',
-];
+import 'package:google_fonts/google_fonts.dart';
 
 const mockImages = [
+  [
+    'https://www.peppermillinteriors.com/image/catalog/products/chr-403-ra-vintage-style-armchair/vintage-style-armchair.jpg',
+    'https://previews.123rf.com/images/technobulka/technobulka1712/technobulka171200038/91301121-red-vintage-sprint-scooter-oldschool.jpg',
+    'https://img1.elektrobike-online.com/UB-Wattitud-Old-Timer-Old-School-E-Bike-gallerySquareTeaser-990bd9ef-1573817.jpg',
+  ],
   [
     'https://www.meblewojcik.com.pl/gfx/meblewojcik/userfiles/kolekcje/cortina/mw_cortina_nowosci.jpg',
     'https://images.all-free-download.com/images/graphicthumb/modern_living_room_boutique_picture_167584.jpg',
@@ -38,16 +38,42 @@ class OffersSwiper extends StatefulWidget {
 }
 
 class _OffersSwiperState extends State<OffersSwiper> {
-  String currUrl = mockUrls[0];
-  int currOffer = 0;
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: double.infinity,
-      width: double.infinity,
-      child: _buildAllOffersCarusel(),
-    );
+        height: double.infinity,
+        width: double.infinity,
+        child: Stack(children: [
+          _buildAllOffersCarusel(),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                vertical: 8.0,
+              ),
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: Theme.of(context).canvasColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(50.0),
+                  topRight: Radius.circular(50.0),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 9,
+                    offset: Offset(0, -3),
+                  )
+                ],
+              ),
+              child: Center(
+                child: _buildIconButton(context, icon: Icons.add),
+              ),
+            ),
+          )
+        ]));
   }
 
   Widget _buildAllOffersCarusel() {
@@ -62,24 +88,26 @@ class _OffersSwiperState extends State<OffersSwiper> {
           builder: (BuildContext context) {
             return Container(
               width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.symmetric(horizontal: 2.0),
+              margin: EdgeInsets.symmetric(horizontal: 0.0),
               child: Stack(
-                alignment: Alignment.center,
+                alignment: Alignment.centerLeft,
                 children: [
                   Center(
                     child: _buildCurrOfferCarusel(imageList),
                   ),
                   Positioned(
-                    bottom: 25,
+                    top: 30,
+                    left: 36,
                     child: Container(
-                      width: MediaQuery.of(context).size.width - 50,
                       height: 46.0,
                       child: Text(
                         'Sample Title',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 26.0,
-                          fontWeight: FontWeight.w800,
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.bold,
+                          textStyle: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 22.0,
+                          ),
                         ),
                       ),
                     ),
@@ -121,9 +149,8 @@ class _OffersSwiperState extends State<OffersSwiper> {
         return Builder(
           builder: (BuildContext context) {
             return Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(0.0),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(12.0),
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   child: OfferCard(url: url),
