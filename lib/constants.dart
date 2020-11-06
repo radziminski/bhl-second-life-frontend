@@ -9,6 +9,7 @@ const String kLoadingRoute = '/loading';
 const String kSettingsRoute = '/settings';
 const String kLoginRoute = '/login';
 const String kMessagesRoute = '/msg';
+const String kChatRoute = '/chat';
 
 // Api
 

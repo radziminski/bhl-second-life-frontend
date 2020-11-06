@@ -1,4 +1,6 @@
+import 'package:SecondLife/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ChatsList extends StatefulWidget {
   @override
@@ -26,12 +28,18 @@ class _ChatsListState extends State<ChatsList> {
   }
 
   Widget _buildListElement(context,
-      {String title, String subtitle, String, trailing}) {
+      {String title, String subtitle, String trailing}) {
     return ListTile(
-      title: Text(title),
-      subtitle: Text(subtitle),
+      title: Text(title, style: GoogleFonts.poppins(color: Colors.white)),
+      subtitle: Text(subtitle,
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontSize: 12,
+          )),
       trailing: Text(trailing),
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamed(context, kChatRoute);
+      },
       leading: Container(
         decoration: BoxDecoration(
           color: Colors.white,
