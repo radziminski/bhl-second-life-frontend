@@ -1,4 +1,5 @@
 import 'package:SecondLife/constants.dart';
+import 'package:SecondLife/routes.dart';
 import 'package:SecondLife/screens/offers_screen.dart';
 import 'package:SecondLife/styles/theme.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,8 @@ class SecondLifeApp extends StatelessWidget {
     return MaterialApp(
       title: kTitle,
       theme: appTheme,
-      home: OffersScreen(),
+      initialRoute: kHomeRoute,
+      routes: appRoutes,
     );
   }
 }
