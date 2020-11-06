@@ -1,3 +1,4 @@
+import 'package:SecondLife/widgets/ChatsList.dart';
 import 'package:SecondLife/widgets/DefaultAppBar.dart';
 import 'package:SecondLife/widgets/DefaultBottomNavBar.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,13 @@ class MessagesScreen extends StatelessWidget {
       appBar: buildDefaultAppBar(context, 'Matched trades'),
       bottomNavigationBar: buildDefaultBottomNavBar(context),
       body: SafeArea(
-        child: Container(),
+        child: Column(
+          children: [
+            Expanded(
+              child: ChatsList(),
+            ),
+          ],
+        ),
       ),
     );
   }

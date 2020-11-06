@@ -12,4 +12,11 @@ ThemeData appTheme = ThemeData(
   accentColor: kColors['primaryLight'],
   canvasColor: kColors['background'],
   visualDensity: VisualDensity.adaptivePlatformDensity,
+  textTheme: TextTheme(
+    bodyText1: TextStyle(),
+    bodyText2: TextStyle(),
+  ).apply(
+    bodyColor: Colors.white,
+    displayColor: Colors.white,
+  ),
 );
