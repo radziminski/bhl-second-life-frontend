@@ -50,7 +50,9 @@ class Chat extends StatelessWidget {
           padding: EdgeInsets.all(16.0),
           margin: EdgeInsets.only(bottom: 20.0),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.8),
+            color: direction == ChatBubbleDirection.left
+                ? Colors.white.withOpacity(0.8)
+                : Colors.red[100].withOpacity(0.9),
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),

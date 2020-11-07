@@ -15,4 +15,11 @@ class ChatModel extends ChangeNotifier {
     messages = res;
     notifyListeners();
   }
+
+  Future createMessage(
+      int offerId, String sender, String receiver, String message) async {
+    await service.postMessagesForChat(offerId, sender, receiver, message);
+    messages.add(MessageDto(text: message, receiver: receiver, sender: sender));
+    notifyListeners();
+  }
 }

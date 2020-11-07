@@ -63,4 +63,15 @@ class ApiService {
 
     return messages;
   }
+
+  Future postMessagesForChat(
+      int offerId, String sender, String receiver, String message) async {
+    final res = await requestService.client
+        .post('https://bhl5-db-messenger.herokuapp.com/new_message', data: {
+      "sender_name": sender,
+      "receiver_name": receiver,
+      "advertisement_id": offerId,
+      "message_content": message,
+    });
+  }
 }

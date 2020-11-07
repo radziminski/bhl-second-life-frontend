@@ -17,6 +17,10 @@ class _ChatScreenState extends State<ChatScreen> {
   final ChatModel chatModel = locator<ChatModel>();
   final AuthModel authModel = locator<AuthModel>();
   bool isLoaded = false;
+  TextEditingController messageController = TextEditingController();
+  int offerId = 4;
+  String sender = 'Odey';
+  String receiver = 'Peterus';
 
   @override
   void initState() {
@@ -58,6 +62,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         ),
                         child: Center(
                           child: TextField(
+                            controller: messageController,
                             style: TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                               border: InputBorder.none,
@@ -78,7 +83,10 @@ class _ChatScreenState extends State<ChatScreen> {
                             color: Colors.white,
                             size: 32,
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+                            await chatModel.createMessage(offerId, sender,
+                                receiver, messageController.text);
+                          },
                         )),
                   ],
                 ),
