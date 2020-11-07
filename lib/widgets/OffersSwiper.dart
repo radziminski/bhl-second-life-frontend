@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:SecondLife/widgets/OfferCard.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -23,14 +24,19 @@ const mockImages = [
     'https://images.all-free-download.com/images/graphiclarge/computer_mouse_201790.jpg',
     'https://images.all-free-download.com/images/graphiclarge/computer_monitor_isolated_195430.jpg',
     'https://images.all-free-download.com/images/graphiclarge/old_tv_hd_picture_5_168677.jpg',
-    'https://images.all-free-download.com/images/graphiclarge/apple_watch_563737.jpg'
+    'https://images.all-free-download.com/images/graphiclarge/apple_watch_563737.jpg',
+    'https://images.pexels.com/photos/1181354/pexels-photo-1181354.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'
   ],
   [
     'https://images.all-free-download.com/images/graphiclarge/acoustic_guitar_184807.jpg',
     'https://images.all-free-download.com/images/graphiclarge/wireless_microphone_185539.jpg',
-    'https://images.all-free-download.com/images/graphiclarge/violin_188018.jpg'
+    'https://images.all-free-download.com/images/graphiclarge/violin_188018.jpg',
+    'https://images.pexels.com/photos/267350/pexels-photo-267350.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'
   ]
 ];
+
+const kRedColor = Color(0xFFFF6D6D);
+const kAnimationDurationMs = 200;
 
 class OffersSwiper extends StatefulWidget {
   @override
@@ -38,14 +44,55 @@ class OffersSwiper extends StatefulWidget {
 }
 
 class _OffersSwiperState extends State<OffersSwiper> {
+  CarouselController yCarouselController = CarouselController();
+  bool _isHeartBuild = false;
+  double _heartOpacity = 0;
+  bool _showOffer = true;
+
+  Future _likeOffer() async {
+    setState(() {
+      _isHeartBuild = true;
+    });
+    await Future.delayed(Duration(milliseconds: 100));
+    setState(() {
+      _heartOpacity = 1;
+      _showOffer = false;
+    });
+    await Future.delayed(Duration(milliseconds: 500));
+    await yCarouselController.nextPage(
+        duration: Duration(milliseconds: 1), curve: Curves.linear);
+    await Future.delayed(Duration(milliseconds: 100));
+    setState(() {
+      _showOffer = true;
+    });
+    await Future.delayed(Duration(milliseconds: 100));
+    setState(() {
+      _heartOpacity = 0;
+    });
+    await Future.delayed(Duration(milliseconds: 150));
+    setState(() {
+      _isHeartBuild = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       height: double.infinity,
       width: double.infinity,
       child: Stack(
+        alignment: Alignment.center,
         children: [
           _buildAllOffersCarusel(),
+          _isHeartBuild
+              ? Positioned(
+                  child: AnimatedOpacity(
+                    opacity: _heartOpacity,
+                    duration: Duration(milliseconds: kAnimationDurationMs),
+                    child: Icon(Icons.favorite, color: kRedColor, size: 240),
+                  ),
+                )
+              : Container(),
           Positioned(
             bottom: 0,
             left: 0,
@@ -55,52 +102,38 @@ class _OffersSwiperState extends State<OffersSwiper> {
                 bottom: 40.0,
               ),
               width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  // color: Theme.of(context).canvasColor,
-                  // // borderRadius: BorderRadius.only(
-                  // //   topLeft: Radius.circular(50.0),
-                  // //   topRight: Radius.circular(50.0),
-                  // // ),
-                  // gradient: LinearGradient(
-                  //   begin: FractionalOffset.topCenter,
-                  //   end: FractionalOffset.bottomCenter,
-                  //   colors: [
-                  //     Colors.grey.withOpacity(0.0),
-                  //     Colors.white.withOpacity(0.8),
-                  //   ],
-                  //   stops: [0.0, 1.0],
-                  // ),
-                  // boxShadow: [
-                  //   BoxShadow(
-                  //     color: Colors.grey.withOpacity(0.2),
-                  //     spreadRadius: 2,
-                  //     blurRadius: 9,
-                  //     offset: Offset(0, -3),
-                  //   )
-                  // ],
-                  ),
               child: Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     _buildIconButton(
                       context,
-                      onPressed: () {},
+                      onPressed: () {
+                        yCarouselController.nextPage(
+                            duration: Duration(milliseconds: 1),
+                            curve: Curves.linear);
+                      },
                       icon: Icons.close,
                       iconColor: Colors.red,
                       size: 28,
                     ),
                     _buildIconButton(
                       context,
-                      onPressed: () {},
+                      onPressed: () async {
+                        await _likeOffer();
+                      },
                       icon: Icons.favorite,
                       iconColor: Colors.white,
-                      color: Color(0xFFFF6D6D),
+                      color: kRedColor,
                       size: 40,
                     ),
                     _buildIconButton(
                       context,
-                      onPressed: () {},
+                      onPressed: () {
+                        yCarouselController.nextPage(
+                            duration: Duration(milliseconds: 1),
+                            curve: Curves.linear);
+                      },
                       icon: Icons.skip_next,
                       iconColor: Colors.green,
                       size: 28,
@@ -122,6 +155,7 @@ class _OffersSwiperState extends State<OffersSwiper> {
         height: double.infinity,
         scrollDirection: Axis.vertical,
       ),
+      carouselController: yCarouselController,
       items: mockImages.map((imageList) {
         return Builder(
           builder: (BuildContext context) {
@@ -134,23 +168,6 @@ class _OffersSwiperState extends State<OffersSwiper> {
                   Center(
                     child: _buildCurrOfferCarusel(imageList),
                   ),
-                  // Positioned(
-                  //   top: 30,
-                  //   left: 36,
-                  //   child: Container(
-                  //     height: 46.0,
-                  //     child: Text(
-                  //       'Sample Title',
-                  //       style: GoogleFonts.poppins(
-                  //         fontWeight: FontWeight.bold,
-                  //         textStyle: TextStyle(
-                  //           color: Colors.black87,
-                  //           fontSize: 22.0,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             );
@@ -161,27 +178,53 @@ class _OffersSwiperState extends State<OffersSwiper> {
   }
 
   Widget _buildCurrOfferCarusel(List<String> urls) {
-    return CarouselSlider(
-      options: CarouselOptions(
-        height: double.infinity,
-        viewportFraction: 1,
-      ),
-      items: urls.map((url) {
-        return Builder(
-          builder: (BuildContext context) {
-            return Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: OfferCard(url: url),
-                ),
+    return AnimatedOpacity(
+      opacity: _showOffer ? 1 : 0,
+      duration: Duration(milliseconds: kAnimationDurationMs),
+      child: GestureDetector(
+        onDoubleTap: _likeOffer,
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: 20.0, top: 20.0),
+              alignment: Alignment.centerLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Sample title',
+                      style: GoogleFonts.poppins(fontSize: 20.0)),
+                  Text('Sample description of offer',
+                      style: GoogleFonts.poppins(fontSize: 12.0)),
+                ],
               ),
-            );
-          },
-        );
-      }).toList(),
+            ),
+            Expanded(
+              child: CarouselSlider(
+                options: CarouselOptions(
+                  height: double.infinity,
+                  viewportFraction: 1,
+                ),
+                items: urls.map((url) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: OfferCard(url: url),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }).toList(),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
