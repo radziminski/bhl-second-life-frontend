@@ -1,6 +1,8 @@
 import 'package:SecondLife/constants.dart';
 import 'package:SecondLife/locator.dart';
 import 'package:SecondLife/state/auth_model.dart';
+import 'package:SecondLife/state/chat_model.dart';
+import 'package:SecondLife/state/offers_model.dart';
 import 'package:SecondLife/widgets/DefaultAppBar.dart';
 import 'package:SecondLife/widgets/DefaultBottomNavBar.dart';
 import 'package:flutter/cupertino.dart';
@@ -64,6 +66,8 @@ class SettingsScreen extends StatelessWidget {
                                 context,
                                 listen: false,
                               ).logout();
+                              locator<OffersModel>().clear();
+                              locator<ChatModel>().clear();
                               Navigator.pushNamed(context, kLoginRoute);
                             },
                           )

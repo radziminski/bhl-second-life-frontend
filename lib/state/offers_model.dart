@@ -57,4 +57,10 @@ class OffersModel extends ChangeNotifier {
       priceCategory: priceCategory,
     );
   }
+
+  void clear() {
+    exploredOffers = [];
+    likedOffers = [];
+    dislikedOffers = [];
+  }
 }

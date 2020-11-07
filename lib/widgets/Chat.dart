@@ -15,8 +15,9 @@ class Chat extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(14.0),
       child: ListView(
+        reverse: true,
         children: [
-          ...messages.map((message) {
+          ...messages.reversed.map((message) {
             print(owner);
             print(message);
             print(message.receiver);

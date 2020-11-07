@@ -22,4 +22,8 @@ class ChatModel extends ChangeNotifier {
     messages.add(MessageDto(text: message, receiver: receiver, sender: sender));
     notifyListeners();
   }
+
+  void clear() {
+    messages = [];
+  }
 }
