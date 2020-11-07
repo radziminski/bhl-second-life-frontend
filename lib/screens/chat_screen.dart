@@ -35,11 +35,12 @@ class ChatScreen extends StatelessWidget {
                         child: TextField(
                           style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintStyle: TextStyle(
-                                color: Colors.white.withOpacity(0.6),
-                              ),
-                              hintText: 'Enter a message'),
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: Colors.white.withOpacity(0.6),
+                            ),
+                            hintText: 'Enter a message',
+                          ),
                         ),
                       ),
                     ),

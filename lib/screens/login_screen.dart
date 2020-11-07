@@ -8,32 +8,82 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: 12.0,
+          horizontal: 30.0,
           vertical: 30.0,
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            SizedBox(height: 30.0),
             Container(
-              child: Text('hello'),
+              width: MediaQuery.of(context).size.width * 0.8,
+              alignment: Alignment.centerLeft,
+              child: Column(
+                children: [
+                  Text(
+                    'Welcome to Second Life!',
+                    style: GoogleFonts.poppins(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: 4.0),
+                  Text(
+                    'Type in your username to proceed.',
+                    style: GoogleFonts.poppins(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
+                ],
+              ),
             ),
             Expanded(
-              child: Container(),
-            ),
-            FlatButton(
-              onPressed: () {
-                Navigator.pushNamed(context, kHomeRoute);
-              },
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 12.0,
-                  horizontal: 36.0,
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Center(
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 4.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.065),
+                      borderRadius: BorderRadius.all(Radius.circular(14)),
+                      border: Border.all(
+                          color: Colors.white.withOpacity(0.09), width: 1),
+                    ),
+                    child: TextField(
+                      style: TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintStyle: GoogleFonts.poppins(
+                          color: Colors.white.withOpacity(0.3),
+                        ),
+                        hintText: 'Enter your Username',
+                      ),
+                    ),
+                  ),
                 ),
-                child: Text(
-                  'Sign in',
-                  style: GoogleFonts.poppins(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
+              ),
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: FlatButton(
+                minWidth: MediaQuery.of(context).size.width * 0.8,
+                onPressed: () {
+                  Navigator.pushNamed(context, kHomeRoute);
+                },
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 14.0,
+                    horizontal: 96.0,
+                  ),
+                  child: Text(
+                    'Sign in',
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ),
