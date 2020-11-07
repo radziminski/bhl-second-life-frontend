@@ -10,7 +10,7 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildDefaultAppBar(context, 'Matched trades'),
-      bottomNavigationBar: buildDefaultBottomNavBar(context),
+      bottomNavigationBar: buildDefaultBottomNavBar(context, 2),
       body: SafeArea(
         child: Column(
           children: [

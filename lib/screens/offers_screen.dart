@@ -10,7 +10,7 @@ class OffersScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       //appBar: buildDefaultAppBar(context, 'Second Life'),
-      bottomNavigationBar: buildDefaultBottomNavBar(context),
+      bottomNavigationBar: buildDefaultBottomNavBar(context, 0),
       body: SafeArea(
         child: Column(
           children: [

@@ -1,4 +1,5 @@
 import 'package:SecondLife/constants.dart';
+import 'package:SecondLife/screens/add_offer_screen.dart';
 import 'package:SecondLife/screens/chat_screen.dart';
 import 'package:SecondLife/screens/loading_screen.dart';
 import 'package:SecondLife/screens/login_screen.dart';
@@ -14,4 +15,5 @@ final appRoutes = {
   kChatRoute: (context) => ChatScreen(),
   kLoginRoute: (context) => LoginScreen(),
   kSettingsRoute: (context) => SettingsScreen(),
+  kNewOfferRoute: (context) => AddOfferScreen(),
 };

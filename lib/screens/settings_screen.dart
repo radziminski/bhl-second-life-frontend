@@ -13,7 +13,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildDefaultAppBar(context, 'Settings'),
-      bottomNavigationBar: buildDefaultBottomNavBar(context),
+      bottomNavigationBar: buildDefaultBottomNavBar(context, 3),
       body: SafeArea(
         child: MultiProvider(
             providers: [

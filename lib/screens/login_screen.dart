@@ -1,8 +1,16 @@
 import 'package:SecondLife/constants.dart';
+import 'package:SecondLife/widgets/BigButton.dart';
+import 'package:SecondLife/widgets/TextInput.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController usernameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,54 +47,13 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: Center(
-                  child: Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 4.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.065),
-                      borderRadius: BorderRadius.all(Radius.circular(14)),
-                      border: Border.all(
-                          color: Colors.white.withOpacity(0.09), width: 1),
-                    ),
-                    child: TextField(
-                      style: TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintStyle: GoogleFonts.poppins(
-                          color: Colors.white.withOpacity(0.3),
-                        ),
-                        hintText: 'Enter your Username',
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              child: TextInput(usernameController, 'Enter your Username'),
             ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: FlatButton(
-                minWidth: MediaQuery.of(context).size.width * 0.8,
-                onPressed: () {
-                  Navigator.pushNamed(context, kHomeRoute);
-                },
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 14.0,
-                    horizontal: 96.0,
-                  ),
-                  child: Text(
-                    'Sign in',
-                    style: GoogleFonts.poppins(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
+            BigButton(
+              'Sign in',
+              () {
+                Navigator.pushNamed(context, kHomeRoute);
+              },
             ),
           ],
         ),
