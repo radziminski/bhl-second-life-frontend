@@ -38,6 +38,11 @@ const mockImages = [
 const kRedColor = Color(0xFFFF6D6D);
 const kAnimationDurationMs = 200;
 
+enum OfferOperation {
+  like,
+  dislike,
+}
+
 class OffersSwiper extends StatefulWidget {
   @override
   _OffersSwiperState createState() => _OffersSwiperState();
@@ -46,16 +51,30 @@ class OffersSwiper extends StatefulWidget {
 class _OffersSwiperState extends State<OffersSwiper> {
   CarouselController yCarouselController = CarouselController();
   bool _isHeartBuild = false;
-  double _heartOpacity = 0;
+  bool _isCrossBuild = false;
+  bool _isCrossShown = false;
+  bool _isHeartShown = false;
   bool _showOffer = true;
 
-  Future _likeOffer() async {
+  Future _likeOffer() {
+    return _doOfferOperationAnimation(OfferOperation.like);
+  }
+
+  Future _dislikeOffer() {
+    return _doOfferOperationAnimation(OfferOperation.dislike);
+  }
+
+  Future _doOfferOperationAnimation(OfferOperation operation) async {
     setState(() {
-      _isHeartBuild = true;
+      operation == OfferOperation.like
+          ? _isHeartBuild = true
+          : _isCrossBuild = true;
     });
     await Future.delayed(Duration(milliseconds: 100));
     setState(() {
-      _heartOpacity = 1;
+      operation == OfferOperation.like
+          ? _isHeartShown = true
+          : _isCrossShown = true;
       _showOffer = false;
     });
     await Future.delayed(Duration(milliseconds: 500));
@@ -67,11 +86,15 @@ class _OffersSwiperState extends State<OffersSwiper> {
     });
     await Future.delayed(Duration(milliseconds: 100));
     setState(() {
-      _heartOpacity = 0;
+      operation == OfferOperation.like
+          ? _isHeartShown = false
+          : _isCrossShown = false;
     });
-    await Future.delayed(Duration(milliseconds: 150));
+    await Future.delayed(Duration(milliseconds: kAnimationDurationMs));
     setState(() {
-      _isHeartBuild = false;
+      operation == OfferOperation.like
+          ? _isHeartBuild = false
+          : _isCrossBuild = false;
     });
   }
 
@@ -87,9 +110,18 @@ class _OffersSwiperState extends State<OffersSwiper> {
           _isHeartBuild
               ? Positioned(
                   child: AnimatedOpacity(
-                    opacity: _heartOpacity,
+                    opacity: _isHeartShown ? 1 : 0,
                     duration: Duration(milliseconds: kAnimationDurationMs),
                     child: Icon(Icons.favorite, color: kRedColor, size: 240),
+                  ),
+                )
+              : Container(),
+          _isCrossBuild
+              ? Positioned(
+                  child: AnimatedOpacity(
+                    opacity: _isCrossShown ? 1 : 0,
+                    duration: Duration(milliseconds: kAnimationDurationMs),
+                    child: Icon(Icons.close, color: kRedColor, size: 240),
                   ),
                 )
               : Container(),
@@ -109,9 +141,7 @@ class _OffersSwiperState extends State<OffersSwiper> {
                     _buildIconButton(
                       context,
                       onPressed: () {
-                        yCarouselController.nextPage(
-                            duration: Duration(milliseconds: 1),
-                            curve: Curves.linear);
+                        _dislikeOffer();
                       },
                       icon: Icons.close,
                       iconColor: Colors.red,
@@ -119,8 +149,8 @@ class _OffersSwiperState extends State<OffersSwiper> {
                     ),
                     _buildIconButton(
                       context,
-                      onPressed: () async {
-                        await _likeOffer();
+                      onPressed: () {
+                        _likeOffer();
                       },
                       icon: Icons.favorite,
                       iconColor: Colors.white,
