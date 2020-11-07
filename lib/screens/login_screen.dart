@@ -1,4 +1,6 @@
 import 'package:SecondLife/constants.dart';
+import 'package:SecondLife/locator.dart';
+import 'package:SecondLife/state/auth_model.dart';
 import 'package:SecondLife/widgets/BigButton.dart';
 import 'package:SecondLife/widgets/TextInput.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final AuthModel authModel = locator<AuthModel>();
   TextEditingController usernameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -52,6 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
             BigButton(
               'Sign in',
               () {
+                authModel.login(usernameController.text);
                 Navigator.pushNamed(context, kHomeRoute);
               },
             ),

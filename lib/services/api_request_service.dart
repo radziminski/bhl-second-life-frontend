@@ -15,6 +15,7 @@ class ApiRequestService {
         onRequest: (options) {
           print('== REQUES T==');
           print(options.data);
+          print(options.uri);
           return options;
         },
         onResponse: (options) {

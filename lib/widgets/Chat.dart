@@ -1,36 +1,34 @@
+import 'package:SecondLife/dtos/api/message_dto.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 enum ChatBubbleDirection { left, right }
 const int kTextWrapBreakpoint = 28;
 
-class Chat extends StatefulWidget {
-  @override
-  _ChatState createState() => _ChatState();
-}
+class Chat extends StatelessWidget {
+  Chat(this.messages, this.owner);
 
-class _ChatState extends State<Chat> {
+  final List<MessageDto> messages;
+  final String owner;
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(14.0),
       child: ListView(
         children: [
-          _buildChatBubble(
-            context,
-            ChatBubbleDirection.left,
-            'jakjakaś randmomowa wiadomoś',
-          ),
-          _buildChatBubble(
-            context,
-            ChatBubbleDirection.right,
-            'jakaś randmomowa wiadomość',
-          ),
-          _buildChatBubble(
-            context,
-            ChatBubbleDirection.left,
-            'jakaś randmomowa wiadomość',
-          ),
+          ...messages.map((message) {
+            print(owner);
+            print(message);
+            print(message.receiver);
+            print(message.sender);
+            return _buildChatBubble(
+              context,
+              message.receiver != owner
+                  ? ChatBubbleDirection.left
+                  : ChatBubbleDirection.right,
+              message.text,
+            );
+          })
         ],
       ),
     );

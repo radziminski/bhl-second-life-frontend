@@ -14,5 +14,6 @@ const String kNewOfferRoute = '/new-offer';
 
 // Api
 const String kApiBaseUrl = 'http://10.0.0.11:8080/';
+const String kChatBaseUrl = 'https://bhl5-db-messenger.herokuapp.com/';
 
 // Local Db

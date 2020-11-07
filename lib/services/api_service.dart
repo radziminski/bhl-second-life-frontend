@@ -1,3 +1,4 @@
+import 'package:SecondLife/dtos/api/message_dto.dart';
 import 'package:SecondLife/dtos/api/offer_dto.dart';
 import 'package:SecondLife/locator.dart';
 import 'package:SecondLife/services/api_request_service.dart';
@@ -23,10 +24,6 @@ class ApiService {
     // TODO: matches request
   }
 
-  Future getMessagesForChat(String offerId) {
-    // TODO: matches request
-  }
-
   Future createOffer({
     String title,
     String description,
@@ -49,5 +46,21 @@ class ApiService {
     });
     print(response);
     print(response.data);
+  }
+
+  Future getMessagesForChat(int offerId, String sender, String receiver) async {
+    final res = await requestService.client
+        .get('https://bhl5-db-messenger.herokuapp.com/chat', queryParameters: {
+      "sender_name": sender,
+      "receiver_name": receiver,
+      "advertisement_id": offerId,
+    });
+    List<MessageDto> messages = [];
+
+    for (final message in res.data) {
+      messages.add(MessageDto.fromJson(message));
+    }
+
+    return messages;
   }
 }
