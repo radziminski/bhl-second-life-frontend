@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:SecondLife/locator.dart';
 import 'package:SecondLife/state/auth_model.dart';
 import 'package:SecondLife/state/chat_model.dart';
@@ -22,12 +24,29 @@ class _ChatScreenState extends State<ChatScreen> {
   String sender = 'Odey';
   String receiver = 'Peterus';
 
+  Timer requestRenew;
+
   @override
   void initState() {
     super.initState();
     chatModel
         .getCurrMessages(4, 'Odey', 'Peterus')
         .then((_) => setState(() => isLoaded = true));
+
+    requestRenew = Timer.periodic(new Duration(seconds: 15), (timer) async {
+      if (!mounted) return;
+      try {
+        await chatModel.getCurrMessages(4, 'Odey', 'Peterus');
+      } catch (e) {
+        print(e);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    requestRenew.cancel();
+    super.dispose();
   }
 
   @override
@@ -86,6 +105,8 @@ class _ChatScreenState extends State<ChatScreen> {
                           onPressed: () async {
                             await chatModel.createMessage(offerId, sender,
                                 receiver, messageController.text);
+                            messageController.clear();
+                            FocusScope.of(context).unfocus();
                           },
                         )),
                   ],
