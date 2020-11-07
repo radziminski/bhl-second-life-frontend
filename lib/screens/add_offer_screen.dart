@@ -5,8 +5,8 @@ import 'package:SecondLife/widgets/TextInput.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+import 'dart:async';
+import 'package:multi_image_picker/multi_image_picker.dart';
 
 const kPriceValues = [
   'super cheap',
@@ -34,18 +34,28 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
   TextEditingController descriptionController = TextEditingController();
   String selectedPriceCat = kPriceValues[0];
   String selectedTypeCat = kCatValues[0];
-  File _image;
-  final picker = ImagePicker();
+  List<Asset> images = List<Asset>();
 
-  Future getImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
+  Future<void> getImages() async {
+    setState(() {
+      images = List<Asset>();
+    });
+
+    List<Asset> resultList;
+
+    try {
+      resultList = await MultiImagePicker.pickImages(
+        maxImages: 300,
+      );
+    } on Exception catch (e) {}
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
 
     setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        print('No image selected.');
-      }
+      images = resultList;
     });
   }
 
@@ -61,7 +71,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
             width: MediaQuery.of(context).size.width * 0.82,
             child: ListView(
               children: [
-                SizedBox(height: 30),
+                SizedBox(height: 10),
                 TextInput(titleController, 'Offer Title'),
                 SizedBox(height: 30),
                 TextInput(descriptionController, 'Offer Description'),
@@ -87,7 +97,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                             icon: Icon(Icons.arrow_downward),
                             iconSize: 24,
                             elevation: 0,
-                            style: TextStyle(color: Colors.white),
+                            style: GoogleFonts.poppins(color: Colors.white),
                             underline: Container(
                               height: 0,
                               color: Colors.white,
@@ -122,7 +132,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                             icon: Icon(Icons.arrow_downward),
                             iconSize: 24,
                             elevation: 0,
-                            style: TextStyle(color: Colors.white),
+                            style: GoogleFonts.poppins(color: Colors.white),
                             underline: Container(
                               height: 0,
                               color: Colors.white,
@@ -149,15 +159,29 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                 SizedBox(height: 40),
                 Container(
                   child: Center(
-                    child: IconButton(
-                      onPressed: () {
-                        getImage();
-                      },
-                      icon: Icon(
-                        CupertinoIcons.add_circled,
-                        color: Colors.white,
-                        size: 60,
-                      ),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Upload Images:',
+                          style: GoogleFonts.poppins(color: Colors.white),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            getImages();
+                          },
+                          icon: Icon(
+                            Icons.upload_file,
+                            color: Colors.white,
+                            size: 34,
+                          ),
+                        ),
+                        Text(
+                          images == null || images.isEmpty
+                              ? ''
+                              : 'Selected ${images.length} image${images.length == 1 ? '' : 's'}.',
+                          style: GoogleFonts.poppins(color: Colors.white),
+                        ),
+                      ],
                     ),
                   ),
                 ),

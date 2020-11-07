@@ -1,5 +1,3 @@
-import 'package:SecondLife/constants.dart';
-import 'package:SecondLife/widgets/DefaultAppBar.dart';
 import 'package:SecondLife/widgets/DefaultBottomNavBar.dart';
 import 'package:SecondLife/widgets/OffersSwiper.dart';
 import 'package:flutter/cupertino.dart';
