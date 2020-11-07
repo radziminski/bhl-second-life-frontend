@@ -1,10 +1,14 @@
 import 'dart:ui';
 
+import 'package:SecondLife/locator.dart';
+import 'package:SecondLife/state/auth_model.dart';
+import 'package:SecondLife/state/offers_model.dart';
 import 'package:SecondLife/widgets/OfferCard.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 const mockImages = [
   [
@@ -49,22 +53,43 @@ class OffersSwiper extends StatefulWidget {
 }
 
 class _OffersSwiperState extends State<OffersSwiper> {
+  final OffersModel offersModel = locator<OffersModel>();
+  final AuthModel authModel = locator<AuthModel>();
+
   CarouselController yCarouselController = CarouselController();
+  bool _isLoaded = false;
   bool _isHeartBuild = false;
   bool _isCrossBuild = false;
   bool _isCrossShown = false;
   bool _isHeartShown = false;
   bool _showOffer = true;
+  int _currentPage = 0;
 
-  Future _likeOffer() {
+  @override
+  void initState() {
+    super.initState();
+    offersModel.getExploreOffers().then((_) {
+      if (mounted)
+        setState(() {
+          _isLoaded = true;
+        });
+    });
+  }
+
+  Future _likeOffer() async {
     return _doOfferOperationAnimation(OfferOperation.like);
   }
 
-  Future _dislikeOffer() {
-    return _doOfferOperationAnimation(OfferOperation.dislike);
+  Future _dislikeOffer() async {
+    int page = _currentPage;
+    print(offersModel.exploredOffers[page].title);
+    await _doOfferOperationAnimation(OfferOperation.dislike);
+    offersModel.dislikeOffer(
+        authModel.username, offersModel.exploredOffers[page].id);
   }
 
   Future _doOfferOperationAnimation(OfferOperation operation) async {
+    int page = _currentPage;
     setState(() {
       operation == OfferOperation.like
           ? _isHeartBuild = true
@@ -78,12 +103,14 @@ class _OffersSwiperState extends State<OffersSwiper> {
       _showOffer = false;
     });
     await Future.delayed(Duration(milliseconds: 500));
-    await yCarouselController.nextPage(
-        duration: Duration(milliseconds: 1), curve: Curves.linear);
-    await Future.delayed(Duration(milliseconds: 100));
-    setState(() {
-      _showOffer = true;
-    });
+    operation == OfferOperation.like
+        ? await offersModel.likeOffer(
+            authModel.username, offersModel.exploredOffers[page].id)
+        : await offersModel.dislikeOffer(
+            authModel.username, offersModel.exploredOffers[page].id);
+
+    await Future.delayed(Duration(milliseconds: 1000));
+
     await Future.delayed(Duration(milliseconds: 100));
     setState(() {
       operation == OfferOperation.like
@@ -96,97 +123,112 @@ class _OffersSwiperState extends State<OffersSwiper> {
           ? _isHeartBuild = false
           : _isCrossBuild = false;
     });
+    setState(() {
+      _showOffer = true;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: double.infinity,
-      width: double.infinity,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          _buildAllOffersCarusel(),
-          _isHeartBuild
-              ? Positioned(
-                  child: AnimatedOpacity(
-                    opacity: _isHeartShown ? 1 : 0,
-                    duration: Duration(milliseconds: kAnimationDurationMs),
-                    child: Icon(Icons.favorite, color: kRedColor, size: 240),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: offersModel),
+      ],
+      builder: (context, child) => Container(
+        height: double.infinity,
+        width: double.infinity,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            _buildAllOffersCarusel(context),
+            _isHeartBuild
+                ? Positioned(
+                    child: AnimatedOpacity(
+                      opacity: _isHeartShown ? 1 : 0,
+                      duration: Duration(milliseconds: kAnimationDurationMs),
+                      child: Icon(Icons.favorite, color: kRedColor, size: 240),
+                    ),
+                  )
+                : Container(),
+            _isCrossBuild
+                ? Positioned(
+                    child: AnimatedOpacity(
+                      opacity: _isCrossShown ? 1 : 0,
+                      duration: Duration(milliseconds: kAnimationDurationMs),
+                      child: Icon(Icons.close, color: kRedColor, size: 240),
+                    ),
+                  )
+                : Container(),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              child: Container(
+                padding: EdgeInsets.only(
+                  top: 0.0,
+                  bottom: 40.0,
+                ),
+                width: MediaQuery.of(context).size.width,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildIconButton(
+                        context,
+                        onPressed: () {
+                          _dislikeOffer();
+                        },
+                        icon: Icons.close,
+                        iconColor: Colors.red,
+                        size: 28,
+                      ),
+                      _buildIconButton(
+                        context,
+                        onPressed: () {
+                          _likeOffer();
+                        },
+                        icon: Icons.favorite,
+                        iconColor: Colors.white,
+                        color: kRedColor,
+                        size: 40,
+                      ),
+                      _buildIconButton(
+                        context,
+                        onPressed: () {
+                          yCarouselController.nextPage(
+                              duration: Duration(milliseconds: 1),
+                              curve: Curves.linear);
+                        },
+                        icon: Icons.skip_next,
+                        iconColor: Colors.green,
+                        size: 28,
+                      ),
+                    ],
                   ),
-                )
-              : Container(),
-          _isCrossBuild
-              ? Positioned(
-                  child: AnimatedOpacity(
-                    opacity: _isCrossShown ? 1 : 0,
-                    duration: Duration(milliseconds: kAnimationDurationMs),
-                    child: Icon(Icons.close, color: kRedColor, size: 240),
-                  ),
-                )
-              : Container(),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            child: Container(
-              padding: EdgeInsets.only(
-                top: 0.0,
-                bottom: 40.0,
-              ),
-              width: MediaQuery.of(context).size.width,
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildIconButton(
-                      context,
-                      onPressed: () {
-                        _dislikeOffer();
-                      },
-                      icon: Icons.close,
-                      iconColor: Colors.red,
-                      size: 28,
-                    ),
-                    _buildIconButton(
-                      context,
-                      onPressed: () {
-                        _likeOffer();
-                      },
-                      icon: Icons.favorite,
-                      iconColor: Colors.white,
-                      color: kRedColor,
-                      size: 40,
-                    ),
-                    _buildIconButton(
-                      context,
-                      onPressed: () {
-                        yCarouselController.nextPage(
-                            duration: Duration(milliseconds: 1),
-                            curve: Curves.linear);
-                      },
-                      icon: Icons.skip_next,
-                      iconColor: Colors.green,
-                      size: 28,
-                    ),
-                  ],
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildAllOffersCarusel() {
+  Widget _buildAllOffersCarusel(context) {
     return CarouselSlider(
       options: CarouselOptions(
-        viewportFraction: 1.0,
-        height: double.infinity,
-        scrollDirection: Axis.vertical,
-      ),
+          viewportFraction: 1.0,
+          height: double.infinity,
+          scrollDirection: Axis.vertical,
+          onPageChanged: (page, _) {
+            setState(() {
+              _currentPage = page;
+            });
+          }),
       carouselController: yCarouselController,
-      items: mockImages.map((imageList) {
+      items: Provider.of<OffersModel>(context)
+          .exploredOffers
+          .where((offer) => offer.id != null)
+          .map((offer) {
         return Builder(
           builder: (BuildContext context) {
             return Container(
@@ -196,7 +238,8 @@ class _OffersSwiperState extends State<OffersSwiper> {
                 alignment: Alignment.centerLeft,
                 children: [
                   Center(
-                    child: _buildCurrOfferCarusel(imageList),
+                    child: _buildCurrOfferCarusel(
+                        offer.imageUrls, offer.title, offer.description),
                   ),
                 ],
               ),
@@ -207,7 +250,8 @@ class _OffersSwiperState extends State<OffersSwiper> {
     );
   }
 
-  Widget _buildCurrOfferCarusel(List<String> urls) {
+  Widget _buildCurrOfferCarusel(
+      List<String> urls, String title, String subtitle) {
     return AnimatedOpacity(
       opacity: _showOffer ? 1 : 0,
       duration: Duration(milliseconds: kAnimationDurationMs),
@@ -221,9 +265,9 @@ class _OffersSwiperState extends State<OffersSwiper> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Sample title',
+                  Text(title != null ? title : 'Unknown',
                       style: GoogleFonts.poppins(fontSize: 20.0)),
-                  Text('Sample description of offer',
+                  Text(subtitle != null ? subtitle : 'Unknown',
                       style: GoogleFonts.poppins(fontSize: 12.0)),
                 ],
               ),

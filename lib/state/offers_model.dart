@@ -15,7 +15,7 @@ class OffersModel extends ChangeNotifier {
     exploredOffers = offers;
   }
 
-  Future likeOffer(String user, String offerId) async {
+  Future likeOffer(String user, int offerId) async {
     await service.likeOffer(user, offerId);
     int likedOfferIndex =
         exploredOffers.indexWhere((offer) => offer.id == offerId);
@@ -26,7 +26,7 @@ class OffersModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void dislikeOffer(String user, String offerId) {
+  void dislikeOffer(String user, int offerId) {
     int dislikedOfferIndex =
         exploredOffers.indexWhere((offer) => offer.id == offerId);
     OfferDto likedOffer = exploredOffers[dislikedOfferIndex];

@@ -1,22 +1,29 @@
 class OfferDto {
-  String id;
+  int id;
   String title;
   List<String> imageUrls;
   String description;
   double longitude;
   double latitude;
-  int ownerId;
+  String owner;
   List<int> itemCategories;
   int priceCategory;
 
   OfferDto.fromJson(json) {
+    id = json['id'];
     title = json['title'];
-    imageUrls = json['imageUrls'];
+    imageUrls = [];
+    for (final image in json['imageUrls']) {
+      imageUrls.add(image.toString());
+    }
     description = json['description'];
     longitude = json['longitude'];
     latitude = json['latitude'];
-    ownerId = json['ownerId'];
-    itemCategories = json['itemCategories'];
+    owner = json['owner'];
+    itemCategories = [];
+    for (final cat in json['itemCategories']) {
+      itemCategories.add(cat);
+    }
     priceCategory = json['priceCategory'];
   }
 }

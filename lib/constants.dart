@@ -13,6 +13,6 @@ const String kChatRoute = '/chat';
 const String kNewOfferRoute = '/new-offer';
 
 // Api
-const String kApiBaseUrl = 'http://localhost:8080';
+const String kApiBaseUrl = 'http://10.0.0.11:8080/';
 
 // Local Db

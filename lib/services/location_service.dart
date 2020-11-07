@@ -5,20 +5,20 @@ class LocationService {
   bool _serviceEnabled;
   PermissionStatus _permissionGranted;
 
-  Future<Map<String, int>> getLocation() async {
-    Map retv;
+  Future<Map<String, double>> getLocation() async {
     if (_permissionGranted != PermissionStatus.granted) {
       await requestPermission();
     }
 
     if (_serviceEnabled && _permissionGranted == PermissionStatus.granted) {
       LocationData _locationData = await Location().getLocation();
-      retv = {
+      Map<String, double> retv = {
         'latitude': _locationData.latitude,
         'longitude': _locationData.longitude
       };
+      return retv;
     }
-    return retv;
+    return null;
   }
 
   Future<bool> get serviceEnabled async {

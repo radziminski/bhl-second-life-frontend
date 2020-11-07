@@ -7,7 +7,7 @@ class ApiService {
 
   Future<List<OfferDto>> getAllOffers() async {
     final response = await requestService.client.get('/advertisement');
-    List<OfferDto> offers;
+    List<OfferDto> offers = [];
     for (final offer in response.data) {
       print(offer);
       offers.add(OfferDto.fromJson(offer));
@@ -15,7 +15,7 @@ class ApiService {
     return offers;
   }
 
-  Future likeOffer(String user, String offerId) {
+  Future likeOffer(String user, int offerId) {
     // TODO: like offer request
   }
 
@@ -36,7 +36,18 @@ class ApiService {
     String owner,
     List<int> itemCategories,
     int priceCategory,
-  }) {
-    // TODO: post request
+  }) async {
+    final response = await requestService.client.post('/advertisement', data: {
+      'title': title,
+      'description': description,
+      'imageUrls': imageUrls,
+      'latitude': latitude,
+      'longitude': longitude,
+      'owner': owner,
+      'itemCategories': itemCategories,
+      'priceCategory': priceCategory,
+    });
+    print(response);
+    print(response.data);
   }
 }

@@ -1,3 +1,7 @@
+import 'package:SecondLife/locator.dart';
+import 'package:SecondLife/state/location_model.dart';
+import 'package:SecondLife/state/offers_model.dart';
+import 'package:SecondLife/state/auth_model.dart';
 import 'package:SecondLife/widgets/BigButton.dart';
 import 'package:SecondLife/widgets/DefaultAppBar.dart';
 import 'package:SecondLife/widgets/DefaultBottomNavBar.dart';
@@ -30,11 +34,33 @@ class AddOfferScreen extends StatefulWidget {
 }
 
 class _AddOfferScreenState extends State<AddOfferScreen> {
+  final OffersModel offersModel = locator<OffersModel>();
+  final AuthModel authModel = locator<AuthModel>();
+  final LocationModel locationModel = locator<LocationModel>();
+
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   String selectedPriceCat = kPriceValues[0];
   String selectedTypeCat = kCatValues[0];
   List<Asset> images = List<Asset>();
+
+  Future onSend() async {
+    final location = await locationModel.getLocation();
+    if (location == null) {
+      location['longitude'] = 0;
+      location['latitude'] = 0;
+    }
+    await offersModel.createOffer(
+      title: titleController.text,
+      description: descriptionController.text,
+      owner: authModel.username,
+      longitude: location['longitude'],
+      latitude: location['latitude'],
+      imageUrls: [],
+      priceCategory: kPriceValues.indexOf(selectedPriceCat),
+      itemCategories: [kPriceValues.indexOf(selectedPriceCat)],
+    );
+  }
 
   Future<void> getImages() async {
     setState(() {
@@ -186,7 +212,7 @@ class _AddOfferScreenState extends State<AddOfferScreen> {
                   ),
                 ),
                 Container(height: 70),
-                BigButton('Send!', () {}),
+                BigButton('Send!', onSend),
                 SizedBox(height: 20)
               ],
             ),
