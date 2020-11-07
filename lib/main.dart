@@ -16,7 +16,7 @@ class SecondLifeApp extends StatelessWidget {
     return MaterialApp(
       title: kTitle,
       theme: appTheme,
-      initialRoute: kHomeRoute,
+      initialRoute: kLoginRoute,
       routes: appRoutes,
     );
   }
